@@ -3,7 +3,7 @@ import { Link } from "@heroui/link";
 export default function DefaultLayout({ children }) {
   return (
     <div className="relative flex flex-col min-h-screen dark text-foreground bg-background">
-      <main className="container mx-auto max-w-7xl px-6 flex-grow pt-16 ">
+      <main className="container mx-auto max-w-7xl flex-grow ">
         {children}
       </main>
       <footer className="w-full flex items-center justify-center py-3">
