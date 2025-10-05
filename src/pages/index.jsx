@@ -37,7 +37,7 @@ export default function IndexPage() {
 
   return (
     <DefaultLayout>
-      <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10 min-h-screen bg-gray-950">
+      <section className="flex flex-col items-center gap-4 py-8 md:py-10 min-h-screen bg-gray-950">
         <div className="w-full max-w-xl mx-auto px-4">
           <h1 className={title({ color: "blue" })}>{mainTitle}</h1>
           <Input
@@ -122,6 +122,8 @@ export default function IndexPage() {
               : filteredResources.map((res) => (
                 <Card
                   key={res.id}
+                  isPressable
+                  onPress={() => window.open(res.url, "_blank")}
                   className="bg-gray-900 rounded-xl shadow border border-gray-800 text-left"
                 >
                   <CardHeader>
@@ -135,19 +137,6 @@ export default function IndexPage() {
                     </div>
                     <div className="text-gray-400 mb-2">{res.description}</div>
                   </CardBody>
-                  <CardFooter>
-                    <Button
-                      as="a"
-                      href={res.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      color="primary"
-                      variant="light"
-                      className="text-blue-500 hover:underline text-sm"
-                    >
-                      Visit resource
-                    </Button>
-                  </CardFooter>
                 </Card>
               ))}
           </div>
