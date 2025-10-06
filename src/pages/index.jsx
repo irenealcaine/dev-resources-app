@@ -13,7 +13,9 @@ export default function IndexPage() {
 
   // Filtra recursos por búsqueda y categoría
   const filteredResources = resources.filter((res) => {
-    const matchesSearch = res.title.toLowerCase().includes(search.toLowerCase());
+    const matchesSearch = res.title
+      .toLowerCase()
+      .includes(search.toLowerCase());
     const matchesCategory =
       activeCategory === "all" || res.categoryId === activeCategory;
     return matchesSearch && matchesCategory;
@@ -33,7 +35,8 @@ export default function IndexPage() {
   const mainTitle =
     activeCategory === "all"
       ? "Dev Resources"
-      : categories.find((cat) => cat.id === activeCategory)?.name || "Dev Resources";
+      : categories.find((cat) => cat.id === activeCategory)?.name ||
+        "Dev Resources";
 
   return (
     <DefaultLayout>
@@ -46,99 +49,110 @@ export default function IndexPage() {
             type="text"
             variant="bordered"
             value={search}
-            onChange={e => setSearch(e.target.value)}
+            onChange={(e) => setSearch(e.target.value)}
             className="mb-4 w-full"
             placeholder="Search for resources"
           />
 
-          {/* Navbar de categorías con Tabs de HeroUI */}
-          <Tabs
-            selectedKey={activeCategory}
-            onSelectionChange={setActiveCategory}
-            variant="underlined"
-            className="mb-8"
-          >
-            <Tab
-              key="all"
-              title="All"
-              className="text-base px-2 pb-1"
-              classNames={{
-                tab: activeCategory === "all"
-                  ? "border-blue-500 text-white font-semibold"
-                  : "border-transparent text-gray-400"
-              }}
-            />
-            {categories.map((cat) => (
+          {/* Contenedor scrollable para móviles */}
+          <div className="overflow-x-auto">
+            <Tabs
+              selectedKey={activeCategory}
+              onSelectionChange={setActiveCategory}
+              variant="underlined"
+              className="min-w-max mb-4"
+            >
               <Tab
-                key={cat.id}
-                title={cat.name}
+                key="all"
+                title="All"
                 className="text-base px-2 pb-1"
                 classNames={{
-                  tab: activeCategory === cat.id
-                    ? "border-blue-500 text-white font-semibold"
-                    : "border-transparent text-gray-400"
+                  tab:
+                    activeCategory === "all"
+                      ? "border-blue-500 text-white font-semibold"
+                      : "border-transparent text-gray-400",
                 }}
               />
-            ))}
-          </Tabs>
+              {categories.map((cat) => (
+                <Tab
+                  key={cat.id}
+                  title={cat.name}
+                  className="text-base px-2 pb-1"
+                  classNames={{
+                    tab:
+                      activeCategory === cat.id
+                        ? "border-blue-500 text-white font-semibold"
+                        : "border-transparent text-gray-400",
+                  }}
+                />
+              ))}
+            </Tabs>
+          </div>
 
           {/* Cards de recursos */}
           <div className="flex flex-col gap-8">
             {filteredResources.length === 0 && (
-              <div className="text-gray-400 text-center py-8">No resources found.</div>
+              <div className="text-gray-400 text-center py-8">
+                No resources found.
+              </div>
             )}
 
             {activeCategory === "all"
               ? categories.map((cat) =>
-                resourcesByCategory[cat.id].length > 0 ? (
-                  <div key={cat.id}>
-                    <h2 className={subtitle({ class: "mb-2 text-gray-400" })}>{cat.name}</h2>
-                    <div className="flex flex-col gap-6">
-                      {resourcesByCategory[cat.id].map((res) => (
-                        <Card
-                          key={res.id}
-                          isPressable
-                          onPress={() => window.open(res.url, "_blank")}
-                          className="bg-gray-900 rounded-xl shadow border border-gray-800 text-left"
-                        >
-                          <CardHeader>
-                            <span className="text-xs font-bold text-blue-400 uppercase">
-                              {getSubcategoryName(res.subcategoryId)}
-                            </span>
-                          </CardHeader>
-                          <CardBody>
-                            <div className="text-lg font-semibold text-white mb-1">
-                              {res.title}
-                            </div>
-                            <div className="text-gray-400 mb-2">{res.description}</div>
-                          </CardBody>
-
-                        </Card>
-                      ))}
+                  resourcesByCategory[cat.id].length > 0 ? (
+                    <div key={cat.id}>
+                      <h2 className={subtitle({ class: "text-gray-400" })}>
+                        {cat.name}
+                      </h2>
+                      <div className="flex flex-col gap-6">
+                        {resourcesByCategory[cat.id].map((res) => (
+                          <Card
+                            key={res.id}
+                            isPressable
+                            onPress={() => window.open(res.url, "_blank")}
+                            className="bg-gray-900 rounded-xl shadow border border-gray-800 text-left"
+                          >
+                            <CardHeader className="pb-0 ">
+                              <span className="text-xs font-bold text-blue-400 uppercase bg-blue-900/60 py-1 px-2 rounded-full">
+                                {getSubcategoryName(res.subcategoryId)}
+                              </span>
+                            </CardHeader>
+                            <CardBody>
+                              <div className="text-lg font-semibold text-white mb-1">
+                                {res.title}
+                              </div>
+                              <div className="text-gray-400">
+                                {res.description}
+                              </div>
+                            </CardBody>
+                          </Card>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ) : null
-              )
+                  ) : null
+                )
               : filteredResources.map((res) => (
-                <Card
-                  key={res.id}
-                  isPressable
-                  onPress={() => window.open(res.url, "_blank")}
-                  className="bg-gray-900 rounded-xl shadow border border-gray-800 text-left"
-                >
-                  <CardHeader>
-                    <span className="text-xs font-bold text-blue-400 uppercase">
-                      {getSubcategoryName(res.subcategoryId)}
-                    </span>
-                  </CardHeader>
-                  <CardBody>
-                    <div className="text-lg font-semibold text-white mb-1">
-                      {res.title}
-                    </div>
-                    <div className="text-gray-400 mb-2">{res.description}</div>
-                  </CardBody>
-                </Card>
-              ))}
+                  <Card
+                    key={res.id}
+                    isPressable
+                    onPress={() => window.open(res.url, "_blank")}
+                    className="bg-gray-900 rounded-xl shadow border border-gray-800 text-left"
+                  >
+                    <CardHeader>
+                      <span className="text-xs font-bold text-blue-400 uppercase">
+                        {getSubcategoryName(res.subcategoryId)}
+                      </span>
+                    </CardHeader>
+                    <CardBody>
+                      <div className="text-lg font-semibold text-white mb-1">
+                        {res.title}
+                      </div>
+                      <div className="text-gray-400 mb-2">
+                        {res.description}
+                      </div>
+                    </CardBody>
+                  </Card>
+                ))}
           </div>
         </div>
       </section>
