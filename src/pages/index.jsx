@@ -4,7 +4,6 @@ import DefaultLayout from "../layouts/default";
 import { Input } from "@heroui/input";
 import { Card, CardHeader, CardBody, CardFooter } from "@heroui/card";
 import { Tabs, Tab } from "@heroui/tabs";
-import { Button } from "@heroui/button";
 import { subtitle, title } from "../components/primitives";
 
 export default function IndexPage() {
@@ -40,8 +39,8 @@ export default function IndexPage() {
 
   return (
     <DefaultLayout>
-      <section className="flex flex-col items-center gap-4 py-8 md:py-10 min-h-screen bg-gray-950">
-        <div className="w-full max-w-xl mx-auto px-4">
+      <section className="flex flex-col items-center gap-4 py-8 md:py-10 min-h-screen bg-linear-to-r from-black via-gray-900 to-black">
+        <div className="w-full max-w-xl md:max-w-6xl mx-auto px-4">
           <h1 className={title({ color: "blue" })}>{mainTitle}</h1>
           <Input
             key="outside"
@@ -50,8 +49,8 @@ export default function IndexPage() {
             variant="bordered"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="mb-4 w-full"
-            placeholder="Search for resources"
+            className="mb-4 w-full max-w-xl"
+            label="Buscar recursos"
           />
 
           {/* Contenedor scrollable para móviles */}
@@ -104,13 +103,13 @@ export default function IndexPage() {
                       <h2 className={subtitle({ class: "text-gray-400" })}>
                         {cat.name}
                       </h2>
-                      <div className="flex flex-col gap-6">
+                      <div className="flex flex-col md:flex-row md:flex-wrap gap-6">
                         {resourcesByCategory[cat.id].map((res) => (
                           <Card
                             key={res.id}
                             isPressable
                             onPress={() => window.open(res.url, "_blank")}
-                            className="bg-gray-900 rounded-xl shadow border border-gray-800 text-left"
+                            className="bg-gray-900 rounded-xl shadow border border-gray-800 text-left md:w-64"
                           >
                             <CardHeader className="pb-0 ">
                               <span className="text-xs font-bold text-blue-400 uppercase bg-blue-900/60 py-1 px-2 rounded-full">
