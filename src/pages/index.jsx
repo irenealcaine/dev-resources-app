@@ -10,6 +10,10 @@ export default function IndexPage() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
 
+  const [categories, setCategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
+  const [resources, setResources] = useState([]);
+
   // Filtra recursos por búsqueda y categoría
   const filteredResources = resources.filter((res) => {
     const matchesSearch = res.title
