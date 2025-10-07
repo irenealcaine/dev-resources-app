@@ -39,11 +39,12 @@ export default function IndexPage() {
     fetchData();
   }, []);
 
-  // Filtra recursos por búsqueda y categoría
+  // Filtra recursos por búsqueda (en nombre y descripción) y categoría
   const filteredResources = resources.filter((res) => {
-    const matchesSearch = res.title
-      .toLowerCase()
-      .includes(search.toLowerCase());
+    const searchLower = search.toLowerCase();
+    const matchesSearch =
+      res.title.toLowerCase().includes(searchLower) ||
+      res.description?.toLowerCase().includes(searchLower);
     const matchesCategory =
       activeCategory === "all" || res.categoryId === activeCategory;
     return matchesSearch && matchesCategory;
@@ -53,9 +54,22 @@ export default function IndexPage() {
   const getSubcategoryName = (subcategoryId) =>
     subcategories.find((sub) => sub.id === subcategoryId)?.name || "";
 
-  // Agrupa recursos por categoría
+  // Agrupa recursos por categoría y subcategoría
   const resourcesByCategory = categories.reduce((acc, cat) => {
-    acc[cat.id] = filteredResources.filter((res) => res.categoryId === cat.id);
+    // Filtra recursos de la categoría
+    const catResources = filteredResources.filter((res) => res.categoryId === cat.id);
+    // Agrupa por subcategoría
+    const groupedBySubcat = subcategories.reduce((subAcc, subcat) => {
+      const subcatResources = catResources.filter((res) => res.subcategoryId === subcat.id);
+      if (subcatResources.length > 0) {
+        subAcc[subcat.id] = {
+          name: subcat.name,
+          resources: subcatResources,
+        };
+      }
+      return subAcc;
+    }, {});
+    acc[cat.id] = groupedBySubcat;
     return acc;
   }, {});
 
@@ -120,69 +134,66 @@ export default function IndexPage() {
           {/* Cards de recursos */}
           <div className="flex flex-col gap-8">
             {filteredResources.length === 0 && (
-              <div className="text-gray-400 text-center py-8">
-                No resources found.
-              </div>
+              <div className="text-gray-400 text-center py-8">No resources found.</div>
             )}
 
-            {activeCategory === "all" ? (
-              categories.map((cat) =>
-                resourcesByCategory[cat.id].length > 0 ? (
-                  <div key={cat.id}>
-                    <h2 className={subtitle({ class: "text-gray-400" })}>
-                      {cat.name}
-                    </h2>
-                    <div className="flex flex-col md:flex-row md:flex-wrap md:justify-center gap-4">
-                      {resourcesByCategory[cat.id].map((res) => (
-                        <Card
-                          key={res.id}
-                          isPressable
-                          onPress={() => window.open(res.url, "_blank")}
-                          className="bg-gray-900 rounded-xl shadow border border-gray-800 text-left md:min-w-80 md:flex-1 h-fit"
-                        >
-                          <CardHeader className="pb-0 ">
-                            <span className="text-xs font-bold text-blue-400 uppercase bg-blue-900/60 py-1 px-2 rounded-full">
-                              {getSubcategoryName(res.subcategoryId)}
-                            </span>
-                          </CardHeader>
-                          <CardBody>
-                            <div className="text-lg font-semibold text-white mb-1">
-                              {res.title}
-                            </div>
-                            <div className="text-gray-400">
-                              {res.description}
-                            </div>
-                          </CardBody>
-                        </Card>
+            {activeCategory === "all"
+              ? categories.map((cat) => {
+                  const subcats = resourcesByCategory[cat.id];
+                  if (!subcats || Object.keys(subcats).length === 0) return null;
+                  return (
+                    <div key={cat.id}>
+                      <h2 className={subtitle({ class: "text-gray-400" })}>{cat.name}</h2>
+                      {Object.entries(subcats).map(([subcatId, subcatData]) => (
+                        <div key={subcatId} className="mb-4">
+                          <h3 className="text-blue-400 text-base font-semibold mb-2">{subcatData.name}</h3>
+                          <div className="flex flex-col md:flex-row md:flex-wrap md:justify-center gap-4">
+                            {subcatData.resources.map((res) => (
+                              <Card
+                                key={res.id}
+                                isPressable
+                                isHoverable
+                                onPress={() => window.open(res.url, "_blank")}
+                                className="bg-gray-900 rounded-xl shadow border border-gray-800 text-left md:min-w-80 md:flex-1 h-fit"
+                              >
+
+                                <CardBody>
+                                  <div className="text-lg font-semibold text-white mb-1 ">{res.title}</div>
+                                  <div className="text-gray-400">{res.description}</div>
+                                </CardBody>
+                              </Card>
+                            ))}
+                          </div>
+                        </div>
                       ))}
                     </div>
-                  </div>
-                ) : null
-              )
-            ) : (
-              <div className="flex flex-col md:flex-row md:flex-wrap md:justify-center gap-4">
-                {filteredResources.map((res) => (
-                  <Card
-                    key={res.id}
-                    isPressable
-                    onPress={() => window.open(res.url, "_blank")}
-                    className="bg-gray-900 rounded-xl shadow border border-gray-800 text-left md:min-w-80 md:flex-1 h-fit"
-                  >
-                    <CardHeader className="pb-0 ">
-                      <span className="text-xs font-bold text-blue-400 uppercase bg-blue-900/60 py-1 px-2 rounded-full">
-                        {getSubcategoryName(res.subcategoryId)}
-                      </span>
-                    </CardHeader>
-                    <CardBody>
-                      <div className="text-lg font-semibold text-white mb-1">
-                        {res.title}
+                  );
+                })
+              : (() => {
+                  const subcats = resourcesByCategory[activeCategory];
+                  if (!subcats || Object.keys(subcats).length === 0) return null;
+                  return Object.entries(subcats).map(([subcatId, subcatData]) => (
+                    <div key={subcatId} className="mb-4">
+                      <h3 className="text-blue-400 text-base font-semibold mb-2">{subcatData.name}</h3>
+                      <div className="flex flex-col md:flex-row md:flex-wrap md:justify-center gap-4">
+                        {subcatData.resources.map((res) => (
+                          <Card
+                            key={res.id}
+                            isPressable
+                            isHoverable
+                            onPress={() => window.open(res.url, "_blank")}
+                            className="bg-gray-900 rounded-xl shadow border border-gray-800 text-left md:min-w-80 md:flex-1 h-fit"
+                          >
+                            <CardBody>
+                              <div className="text-lg font-semibold text-white mb-1">{res.title}</div>
+                              <div className="text-gray-400">{res.description}</div>
+                            </CardBody>
+                          </Card>
+                        ))}
                       </div>
-                      <div className="text-gray-400">{res.description}</div>
-                    </CardBody>
-                  </Card>
-                ))}
-              </div>
-            )}
+                    </div>
+                  ));
+                })()}
           </div>
         </div>
       </section>
