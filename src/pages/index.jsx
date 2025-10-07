@@ -33,7 +33,7 @@ export default function IndexPage() {
       setSubcategories(subcategoriesData || []);
       setResources(resourcesData || []);
 
-      console.log({ categoriesData, subcategoriesData, resourcesData });
+      // console.log({ categoriesData, subcategoriesData, resourcesData });
     };
 
     fetchData();
