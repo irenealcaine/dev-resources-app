@@ -181,10 +181,13 @@ export default function IndexPage() {
                 <ul className="flex flex-col gap-1">
                   <li>
                     <button
+                      aria-current={
+                        activeCategory === "all" ? "true" : undefined
+                      }
                       className={`flex w-full items-baseline gap-3 border-l-2 px-3 py-2 text-left font-mono text-sm transition-colors ${
                         activeCategory === "all"
                           ? "border-primary text-primary"
-                          : "border-transparent text-default-400 hover:text-foreground"
+                          : "border-transparent text-default-500 hover:text-foreground"
                       }`}
                       onClick={() => setActiveCategory("all")}
                     >
@@ -198,10 +201,13 @@ export default function IndexPage() {
                   {categories.map((cat, i) => (
                     <li key={cat.id}>
                       <button
+                        aria-current={
+                          activeCategory === cat.id ? "true" : undefined
+                        }
                         className={`flex w-full items-baseline gap-3 border-l-2 px-3 py-2 text-left font-mono text-sm transition-colors ${
                           activeCategory === cat.id
                             ? "border-primary text-primary"
-                            : "border-transparent text-default-400 hover:text-foreground"
+                            : "border-transparent text-default-500 hover:text-foreground"
                         }`}
                         onClick={() => setActiveCategory(cat.id)}
                       >
@@ -227,7 +233,7 @@ export default function IndexPage() {
                     className={`rounded-full border px-4 py-1.5 font-mono text-xs transition-colors ${
                       activeCategory === "all"
                         ? "border-primary bg-primary text-primary-foreground"
-                        : "border-divider text-default-400 hover:border-default-500"
+                        : "border-divider text-default-500 hover:border-default-500"
                     }`}
                     onClick={() => setActiveCategory("all")}
                   >
@@ -240,7 +246,7 @@ export default function IndexPage() {
                       className={`rounded-full border px-4 py-1.5 font-mono text-xs lowercase transition-colors ${
                         activeCategory === cat.id
                           ? "border-primary bg-primary text-primary-foreground"
-                          : "border-divider text-default-400 hover:border-default-500"
+                          : "border-divider text-default-500 hover:border-default-500"
                       }`}
                       onClick={() => setActiveCategory(cat.id)}
                     >
@@ -266,6 +272,9 @@ export default function IndexPage() {
                   variant="underlined"
                   onChange={(e) => setSearch(e.target.value)}
                 />
+                <p aria-live="polite" className="sr-only" role="status">
+                  {filteredResources.length} recursos encontrados
+                </p>
               </div>
 
               {filteredResources.length === 0 && (
@@ -298,7 +307,7 @@ export default function IndexPage() {
                       <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-primary">
                         {"//"}
                       </span>
-                      <h3 className="font-mono text-xs uppercase tracking-[0.25em] text-default-400">
+                      <h3 className="font-mono text-xs uppercase tracking-[0.25em] text-default-500">
                         {item.name}
                       </h3>
                     </div>
@@ -307,6 +316,7 @@ export default function IndexPage() {
                 return (
                   <motion.a
                     key={item.res.id}
+                    aria-label={`${item.res.title} — ${item.res.description} (se abre en pestaña nueva)`}
                     className="group -mx-3 grid grid-cols-[2.5rem_1fr_auto] items-center gap-4 border-b border-divider px-3 py-4 transition-colors duration-200 hover:bg-content1/70"
                     href={item.res.url}
                     initial={{ opacity: 0, y: 10 }}

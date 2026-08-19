@@ -5,7 +5,7 @@ export function Provider({ children }) {
   const navigate = useNavigate();
 
   return (
-    <HeroUIProvider navigate={navigate} useHref={useHref} appearance="dark">
+    <HeroUIProvider appearance="dark" navigate={navigate} useHref={useHref}>
       {children}
     </HeroUIProvider>
   );
