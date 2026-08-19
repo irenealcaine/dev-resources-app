@@ -1,3 +1,51 @@
 @import "tailwindcss";
 
-@config "../../tailwind.config.js"
+@config "../../tailwind.config.js";
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #0b0a08;
+  color: #e8e5df;
+  font-family: "Archivo", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: #d4ff3f;
+  color: #14130f;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0b0a08;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2a2721;
+  border: 2px solid #0b0a08;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d4ff3f;
+}
+
+.bg-grid {
+  background-image: radial-gradient(
+    circle,
+    rgba(232, 229, 223, 0.06) 1px,
+    transparent 1px
+  );
+  background-size: 26px 26px;
+}
