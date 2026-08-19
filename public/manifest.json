@@ -1,25 +1,18 @@
 {
-    "short_name": "Dev resources",
-    "name": "Recursos para devs",
-    "icons": [
-      {
-        "src": "code.png",
-        "sizes": "64x64 32x32 24x24 16x16",
-        "type": "image/png"
-      },
-      {
-        "src": "code.png",
-        "type": "image/png",
-        "sizes": "192x192"
-      },
-      {
-        "src": "code.png",
-        "type": "image/png",
-        "sizes": "512x512"
-      }
-    ],
-    "start_url": ".",
-    "display": "standalone",
-    "theme_color": "#030712",
-    "background_color": "#030712"
-  }
+  "short_name": "Dev Resources",
+  "name": "Dev Resources | Directorio de herramientas para developers",
+  "description": "Directorio curado de herramientas, frameworks y referencias para developers.",
+  "icons": [
+    {
+      "src": "code.png",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/png"
+    },
+    { "src": "code.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "code.png", "type": "image/png", "sizes": "512x512" }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#D4FF3F",
+  "background_color": "#0B0A08"
+}

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dev-resources-irene.netlify.app/sitemap.xml
