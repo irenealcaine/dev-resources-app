@@ -135,7 +135,7 @@ export default function IndexPage() {
               índice de herramientas · dev
             </motion.div>
             <motion.h1
-              className="mt-5 font-mono text-5xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-7xl"
+              className="mt-5 max-w-full whitespace-nowrap font-mono text-[clamp(2.1rem,11vw,3rem)] font-bold leading-none tracking-tighter text-foreground sm:text-6xl sm:tracking-tight lg:text-7xl"
               custom={1}
               variants={fadeUp}
             >
